@@ -1,13 +1,11 @@
 ---
 title: "Lab 2 - Data wrangling"
-author: "John Q. Student"
-date: "June 24, 1497"
+author: "Himon Chin-Sam"
+date: "February 12, 2026"
 format: 
   html: default # for speed
   pdf: default # for final output
-
 ---
-
 
 ```{r}
 #| eval: true
@@ -16,41 +14,83 @@ format:
 library(tidyverse)
 ```
 
-
 # Questions
 
 ## Part 1
 
 ### Question 1
 
-
-\newpage
+```{r}
+midwest |> count(state, sort=TRUE)
+# IL has the most counties with 102 counties, and WI has the least counties with 72.
+```
 
 ### Question 2
 
-\newpage
+```{r}
+
+```
 
 ### Question 3
-\newpage
+
+```{r}
+ggplot(midwest, aes(x = popdensity)) +
+  geom_boxplot() +
+  labs(
+    x = "Population density",
+    y = "Count",
+    title = "Population density of midwesten counties",
+  )
+#a
+filter(midwest,popdensity>25000) %>% select(county,state,popdensity,poptotal,area) %>% arrange(desc(popdensity))
+#b
+filter(midwest, popdensity==max(midwest$popdensity)) |> select(county,state,popdensity,poptotal,area)
+```
+
+### Question 4
+
+```{r}
+center = median(midwest$popdensity)
+per75 = IQR(midwest$popdensity)
+spread = per75 - center
+per25 = center - spread
+cat("The distribution of population density of counties is unimodal and extremely right-skewed. \n A typical Midwestern county has population density of ",center," people per unit area. \n The middle 50% of the counties have population densities between ",per25," to ",per75," people \n per unit area.")
+```
 
 ### Question 5
 
-\newpage
+```{r}
+midwest <- midwest |>
+  mutate(metro = if_else(inmetro == 1, "Yes", "No"))
+```
 
 ### Question 6
 
-\newpage
+```{r}
+ggplot(midwest, aes(x=percollege,y=percbelowpoverty, colour=state,shape=state))+
+  geom_point()
+#a
+midwest |> filter(percollege<10 & percbelowpoverty>40) |> 
+  select(county, state,percbelowpoverty,percollege)
+
+#b
+midwest |> filter(percollege>40 & percbelowpoverty<20) |> 
+  select(county, state,percbelowpoverty,percollege)
+
+#c
+midwest |> filter((percollege>40 & percbelowpoverty<20)|
+  (percollege<10 & percbelowpoverty>40)) |> select(county, state,percbelowpoverty,percollege)
+
+#d
+midwest <- midwest |>
+  mutate(pot_outlier = if_else((percollege>40 & percbelowpoverty<20)|(percollege<10 & percbelowpoverty>40),"Yes","No"))
+show(midwest$pot_outlier)
+```
 
 ### Question 7
 
 \newpage
 
-### Question 8
-
-\newpage
-
 ## Part 2
 
-
 ### Question 9
-
