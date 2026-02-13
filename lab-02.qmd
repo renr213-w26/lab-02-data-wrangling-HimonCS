@@ -59,13 +59,35 @@ cat("The distribution of population density of counties is unimodal and extremel
 
 ### Question 5
 
-\newpage
+```{r}
+midwest <- midwest |>
+  mutate(metro = if_else(inmetro == 1, "Yes", "No"))
+```
+
+### Question 6
+
+```{r}
+ggplot(midwest, aes(x=percollege,y=percbelowpoverty, colour=state,shape=state))+
+  geom_point()
+#a
+midwest |> filter(percollege<10 & percbelowpoverty>40) |> 
+  select(county, state,percbelowpoverty,percollege)
+
+#b
+midwest |> filter(percollege>40 & percbelowpoverty<20) |> 
+  select(county, state,percbelowpoverty,percollege)
+
+#c
+midwest |> filter((percollege>40 & percbelowpoverty<20)|
+  (percollege<10 & percbelowpoverty>40)) |> select(county, state,percbelowpoverty,percollege)
+
+#d
+midwest <- midwest |>
+  mutate(pot_outlier = if_else((percollege>40 & percbelowpoverty<20)|(percollege<10 & percbelowpoverty>40),"Yes","No"))
+show(midwest$pot_outlier)
+```
 
 ### Question 7
-
-\newpage
-
-### Question 8
 
 \newpage
 
