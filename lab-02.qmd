@@ -42,16 +42,22 @@ ggplot(midwest, aes(x = popdensity)) +
     title = "Population density of midwesten counties",
   )
 #a
-filter(midwest,popdensity>25000) |> select(county,state,popdensity,poptotal,area)
+filter(midwest,popdensity>25000) %>% select(county,state,popdensity,poptotal,area) %>% arrange(desc(popdensity))
 #b
 filter(midwest, popdensity==max(midwest$popdensity)) |> select(county,state,popdensity,poptotal,area)
 ```
 
 ### Question 4
 
-\newpage
+```{r}
+center = median(midwest$popdensity)
+per75 = IQR(midwest$popdensity)
+spread = per75 - center
+per25 = center - spread
+cat("The distribution of population density of counties is unimodal and extremely right-skewed. \n A typical Midwestern county has population density of ",center," people per unit area. \n The middle 50% of the counties have population densities between ",per25," to ",per75," people \n per unit area.")
+```
 
-### Question 6
+### Question 5
 
 \newpage
 
